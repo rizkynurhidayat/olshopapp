@@ -1,0 +1,56 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/storage/local_storage.dart';
+import '../../domain/usecases/login.dart';
+import '../../domain/usecases/register.dart';
+import 'auth_event.dart';
+import 'auth_state.dart';
+
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final LoginUseCase loginUseCase;
+  final RegisterUseCase registerUseCase;
+  final LocalStorage localStorage;
+
+  AuthBloc({
+    required this.loginUseCase,
+    required this.registerUseCase,
+    required this.localStorage,
+  }) : super(AuthInitial()) {
+    on<AppStarted>((event, emit) {
+      final user = localStorage.getUser();
+      if (user != null) {
+        emit(Authenticated(user));
+      } else {
+        emit(Unauthenticated());
+      }
+    });
+
+    on<LoginRequested>((event, emit) async {
+      emit(AuthLoading());
+      final result = await loginUseCase(LoginParams(email: event.email, password: event.password));
+      await result.fold(
+        (failure) async => emit(AuthError(failure.message)),
+        (user) async {
+          await localStorage.saveUser(user);
+          emit(Authenticated(user));
+        },
+      );
+    });
+
+    on<RegisterRequested>((event, emit) async {
+      emit(AuthLoading());
+      final result = await registerUseCase(RegisterParams(name: event.name, email: event.email, password: event.password));
+      await result.fold(
+        (failure) async => emit(AuthError(failure.message)),
+        (user) async {
+          await localStorage.saveUser(user);
+          emit(Authenticated(user));
+        },
+      );
+    });
+
+    on<LogoutRequested>((event, emit) async {
+      await localStorage.logout();
+      emit(Unauthenticated());
+    });
+  }
+}
