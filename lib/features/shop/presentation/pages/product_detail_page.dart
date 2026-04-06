@@ -1,46 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import '/core/themes/theme.dart';
 import '../../domain/entities/product.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
 import '../../../cart/presentation/pages/checkout_page.dart';
+import '../../../chat/presentation/pages/chat_page.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   final Product product;
 
   const ProductDetailPage({super.key, required this.product});
 
   @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  int _currentImageIndex = 0;
+  final CarouselSliderController _carouselController = CarouselSliderController();
+
+  @override
   Widget build(BuildContext context) {
+    // Combine main image with carousel images, ensuring main image is first
+    final List<String> productImages = [
+      widget.product.image,
+      ...widget.product.carouselImages.where((img) => img != widget.product.image),
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
-          // 1. App Bar with Image
+          // 1. App Bar with Carousel Slider
           SliverAppBar(
-            expandedHeight: 400,
+            expandedHeight: 450,
             pinned: true,
+            backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                color: Colors.white,
-                child: Hero(
-                  tag: 'product_${product.id}',
-                  child: Image.network(
-                    product.image,
-                    fit: BoxFit.contain,
+              background: Stack(
+                children: [
+                  CarouselSlider(
+                    items: productImages.map((imageUrl) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.white,
+                            child: Hero(
+                              tag: imageUrl == widget.product.image 
+                                  ? 'product_${widget.product.id}' 
+                                  : 'product_image_${imageUrl.hashCode}',
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                    carouselController: _carouselController,
+                    options: CarouselOptions(
+                      height: 450,
+                      viewportFraction: 1.0,
+                      enlargeCenterPage: false,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                    ),
                   ),
+                  // Custom Indicator
+                  Positioned(
+                    bottom: 30,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: productImages.asMap().entries.map((entry) {
+                        return GestureDetector(
+                          onTap: () => _carouselController.animateToPage(entry.key),
+                          child: Container(
+                            width: _currentImageIndex == entry.key ? 24.0 : 8.0,
+                            height: 8.0,
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: _currentImageIndex == entry.key
+                                  ? AppColors.primaryPink
+                                  : AppColors.primaryPink.withOpacity(0.3),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            leading: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.white.withOpacity(0.8),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ),
             ),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.favorite_border),
-                onPressed: () {},
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  child: IconButton(
+                    icon: const Icon(Icons.favorite_border, color: AppColors.primaryText),
+                    onPressed: () {},
+                  ),
+                ),
               ),
-              IconButton(
-                icon: const Icon(Icons.share_outlined),
-                onPressed: () {},
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  child: IconButton(
+                    icon: const Icon(Icons.share_outlined, color: AppColors.primaryText),
+                    onPressed: () {},
+                  ),
+                ),
               ),
             ],
           ),
@@ -67,7 +157,7 @@ class ProductDetailPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          product.category.toUpperCase(),
+                          widget.product.category.toUpperCase(),
                           style: const TextStyle(
                             color: AppColors.primaryPink,
                             fontWeight: FontWeight.bold,
@@ -76,10 +166,13 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                       Row(
-                        children: const [
-                          Icon(Icons.star, color: Colors.amber, size: 20),
-                          SizedBox(width: 4),
-                          Text("4.8 (120 reviews)", style: TextStyle(fontWeight: FontWeight.bold)),
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 20),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${widget.product.rating} (${widget.product.soldCount} sold)",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                     ],
@@ -88,17 +181,32 @@ class ProductDetailPage extends StatelessWidget {
                   
                   // Title & Price
                   Text(
-                    product.title,
+                    widget.product.title,
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    "Rp. ${product.price}",
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryPink,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "Rp. ${widget.product.discountPrice ?? widget.product.price}",
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryPink,
+                        ),
+                      ),
+                      if (widget.product.discountPrice != null) ...[
+                        const SizedBox(width: 12),
+                        Text(
+                          "Rp. ${widget.product.price}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.secondaryText,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 24),
 
@@ -109,7 +217,7 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    product.description,
+                    widget.product.description,
                     style: TextStyle(color: Colors.grey.shade600, height: 1.5, fontSize: 14),
                   ),
                   const SizedBox(height: 32),
@@ -180,11 +288,26 @@ class ProductDetailPage extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
+            // Chat Button
+            Container(
+              margin: const EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.chat_bubble_outline, color: AppColors.primaryPink),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ChatPage()),
+                ),
+              ),
+            ),
             // Add to Cart
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
-                  context.read<CartBloc>().add(AddToCart(product));
+                  context.read<CartBloc>().add(AddToCart(widget.product));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Added to cart')),
                   );
@@ -202,7 +325,7 @@ class ProductDetailPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<CartBloc>().add(AddToCart(product));
+                  context.read<CartBloc>().add(AddToCart(widget.product));
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const CheckoutPage()));
                 },
                 style: ElevatedButton.styleFrom(

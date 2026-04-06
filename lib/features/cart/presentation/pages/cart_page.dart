@@ -78,7 +78,7 @@ class CartPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                "Rp. ${item.product.price}",
+                                "Rp. ${item.product.price.toStringAsFixed(3)}",
                                 style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryPink, fontSize: 16),
                               ),
                             ],

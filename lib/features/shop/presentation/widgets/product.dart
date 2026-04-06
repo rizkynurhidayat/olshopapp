@@ -39,25 +39,23 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Center(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[100],
+                ),
+                clipBehavior: Clip.antiAlias,
                 child: Hero(
                   tag: 'product_${product.id}',
-                  child: Image.network(product.image, fit: BoxFit.contain),
+                  child: Image.network(
+                    product.image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 12),
-            Text(
-              product.category.toUpperCase(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 10,
-                color: AppColors.primaryPink,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
             Text(
               product.title,
               style: const TextStyle(
@@ -68,37 +66,81 @@ class ProductCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
+            Text(
+              product.category.toUpperCase(),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 10,
+                color: AppColors.primaryPink,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if (product.discountPrice != null)
+                  Text(
+                    "Rp. ${product.price.toStringAsFixed(3)}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: AppColors.secondaryText,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                const Spacer(),
+                const Icon(Icons.star, color: Colors.amber, size: 14),
+                const SizedBox(width: 2),
                 Text(
-                  "Rp. ${product.price}",
+                  "${product.rating} | ${product.soldCount} sold",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: AppColors.primaryPink,
-                  ),
-                ),
-                GestureDetector(
-                  onTap:()  {
-                    // Prevent navigation to detail page when clicking add button
-                    onAddToCart();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryPink,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.add_shopping_cart,
-                      color: Colors.white,
-                      size: 18,
-                    ),
+                    fontSize: 10,
+                    color: AppColors.secondaryText,
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Rp. ${product.discountPrice ?? product.price}",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: AppColors.primaryPink,
+              ),
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: onAddToCart,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryPink,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      "Add to Cart",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: AppColors.surfaceWhite,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

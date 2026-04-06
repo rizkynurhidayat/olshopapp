@@ -15,7 +15,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.registerUseCase,
     required this.localStorage,
   }) : super(AuthInitial()) {
-    on<AppStarted>((event, emit) {
+    on<AppStarted>((event, emit) async {
+      // Small delay to show splash screen
+      await Future.delayed(const Duration(seconds: 2));
       final user = localStorage.getUser();
       if (user != null) {
         emit(Authenticated(user));

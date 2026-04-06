@@ -7,6 +7,7 @@ import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/shop/presentation/bloc/shop_bloc.dart';
 import 'features/cart/presentation/bloc/cart_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
+import 'features/auth/presentation/pages/splash_page.dart';
 import 'main_page.dart';
 import 'core/themes/theme.dart';
 
@@ -32,11 +33,21 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Gemini Shop',
             theme: appTheme,
-            home: state is Authenticated ? const MainPage() : LoginPage(),
+            home: _getHome(state),
             debugShowCheckedModeBanner: false,
           );
         },
       ),
     );
+  }
+
+  Widget _getHome(AuthState state) {
+    if (state is AuthInitial || state is AuthLoading) {
+      return const SplashPage();
+    } else if (state is Authenticated) {
+      return const MainPage();
+    } else {
+      return LoginPage();
+    }
   }
 }
