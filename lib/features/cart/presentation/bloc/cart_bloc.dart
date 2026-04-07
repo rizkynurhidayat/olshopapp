@@ -7,7 +7,12 @@ import 'cart_state.dart';
 class CartBloc extends Bloc<CartEvent, CartState> {
   final LocalStorage localStorage;
 
-  CartBloc({required this.localStorage}) : super(CartState(items: localStorage.getCartItems())) {
+  CartBloc({required this.localStorage}) : super(const CartState(items: [])) {
+    on<LoadCart>((event, emit) async {
+      final items = await localStorage.getCartItems();
+      emit(CartState(items: items));
+    });
+
     on<AddToCart>((event, emit) async {
       final updatedItems = List<CartItem>.from(state.items);
       final index = updatedItems.indexWhere((item) => item.product.id == event.product.id);

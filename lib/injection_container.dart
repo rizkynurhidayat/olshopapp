@@ -49,7 +49,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOrders(sl()));
   sl.registerLazySingleton(() => SaveOrder(sl()));
   sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(localDataSource: sl()));
-  sl.registerLazySingleton<OrderLocalDataSource>(() => OrderLocalDataSourceImpl());
+  sl.registerLazySingleton<OrderLocalDataSource>(() => OrderLocalDataSourceImpl(localStorage: sl()));
 
   // External
   sl.registerLazySingleton(() => Dio());

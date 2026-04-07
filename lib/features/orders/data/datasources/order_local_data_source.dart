@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../../../core/storage/local_storage.dart';
 import '../models/order_model.dart';
 
 abstract class OrderLocalDataSource {
@@ -7,12 +8,18 @@ abstract class OrderLocalDataSource {
 }
 
 class OrderLocalDataSourceImpl implements OrderLocalDataSource {
-  static const String _orderBoxName = 'orderBox';
+  final LocalStorage localStorage;
   Box? _box;
 
+  OrderLocalDataSourceImpl({required this.localStorage});
+
   Future<Box> _openBox() async {
-    if (_box == null || !_box!.isOpen) {
-      _box = await Hive.openBox(_orderBoxName);
+    final user = localStorage.getUser();
+    if (user == null) throw Exception('User not logged in');
+    
+    final boxName = 'orders_${user.id}';
+    if (_box == null || !_box!.isOpen || _box!.name != boxName) {
+      _box = await Hive.openBox(boxName);
     }
     return _box!;
   }
