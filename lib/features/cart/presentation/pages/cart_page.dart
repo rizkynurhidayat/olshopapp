@@ -5,10 +5,34 @@ import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
 import '../bloc/cart_state.dart';
 import 'checkout_page.dart';
+import '../../../shop/presentation/pages/product_detail_page.dart';
 
 class CartPage extends StatelessWidget {
   final bool isContent;
   const CartPage({super.key, this.isContent = false});
+
+  void _showDeleteConfirmation(BuildContext context, String productName, VoidCallback onConfirm) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove Product'),
+        content: Text('Are you sure you want to remove "$productName" from your cart?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () {
+              onConfirm();
+              Navigator.pop(context);
+            },
+            child: const Text('Remove', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,106 +59,136 @@ class CartPage extends StatelessWidget {
                 itemCount: state.items.length,
                 itemBuilder: (context, index) {
                   final item = state.items[index];
+                  final currentPrice = item.product.discountPrice ?? item.product.price;
                  
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceWhite,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                  return GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProductDetailPage(product: item.product),
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        // Image
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Container(
-                            color: Colors.grey.shade100,
-                            child: Image.network(item.product.image, width: 80, height: 80, fit: BoxFit.contain),
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceWhite,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        // Details
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Image
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              color: Colors.grey.shade100,
+                              child: Image.network(item.product.image, width: 90, height: 100, fit: BoxFit.contain),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          // Details
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.product.title,
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item.product.category,
+                                  style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
+                                ),
+                                const SizedBox(height: 8),
+                                if (item.product.discountPrice != null)
+                                  Text(
+                                    "Rp. ${item.product.price.toStringAsFixed(3)}",
+                                    style: const TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                Text(
+                                  "Rp. ${currentPrice.toStringAsFixed(3)}",
+                                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryPink, fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Actions
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Text(
-                                item.product.title,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              PopupMenuButton<String>(
+                                icon: const Icon(Icons.more_vert, color: Colors.grey),
+                                onSelected: (value) {
+                                  if (value == 'delete') {
+                                    _showDeleteConfirmation(
+                                      context,
+                                      item.product.title,
+                                      () => context.read<CartBloc>().add(RemoveFromCart(item.product.id)),
+                                    );
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'delete',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.delete_outline, color: Colors.red, size: 20),
+                                        SizedBox(width: 8),
+                                        Text('Remove', style: TextStyle(color: Colors.red)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Skincare", // Mock brand
-                                style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                "Rp. ${item.product.price.toStringAsFixed(3)}",
-                                style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primaryPink, fontSize: 16),
+                              Row(
+                                children: [
+                                  _QuantityButton(
+                                    icon: Icons.remove,
+                                    onPressed: () {
+                                      if (item.quantity > 1) {
+                                        context.read<CartBloc>().add(UpdateQuantity(item.product.id, item.quantity - 1));
+                                      } else {
+                                        _showDeleteConfirmation(
+                                          context,
+                                          item.product.title,
+                                          () => context.read<CartBloc>().add(RemoveFromCart(item.product.id)),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Text(
+                                      "${item.quantity}",
+                                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                    ),
+                                  ),
+                                  _QuantityButton(
+                                    icon: Icons.add,
+                                    onPressed: () {
+                                      context.read<CartBloc>().add(UpdateQuantity(item.product.id, item.quantity + 1));
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ),
-                        // Actions
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            PopupMenuButton<String>(
-                              icon: const Icon(Icons.more_vert, color: Colors.grey),
-                              onSelected: (value) {
-                                if (value == 'delete') {
-                                  context.read<CartBloc>().add(RemoveFromCart(item.product.id));
-                                }
-                              },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem(
-                                  value: 'delete',
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete_outline, color: Colors.red, size: 20),
-                                      SizedBox(width: 8),
-                                      Text('Remove', style: TextStyle(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                _QuantityButton(
-                                  icon: Icons.remove,
-                                  onPressed: () {
-                                    context.read<CartBloc>().add(UpdateQuantity(item.product.id, item.quantity - 1));
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: Text(
-                                    "${item.quantity}",
-                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                  ),
-                                ),
-                                _QuantityButton(
-                                  icon: Icons.add,
-                                  onPressed: () {
-                                    context.read<CartBloc>().add(UpdateQuantity(item.product.id, item.quantity + 1));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },

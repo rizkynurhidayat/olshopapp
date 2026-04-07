@@ -40,7 +40,7 @@ class _MainPageState extends State<MainPage> {
             ),
             SizedBox(height: 4),
             Text(
-              'Hi, Rizky 💄',
+              'Hi, Rizky ',
               style: TextStyle(
                 color: AppColors.primaryText,
                 fontSize: 20,
