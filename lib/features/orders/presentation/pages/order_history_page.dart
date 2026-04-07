@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import '../../../../core/themes/theme.dart';
 import '../bloc/order_bloc.dart';
 import '../widgets/order_item.dart';
@@ -35,11 +34,13 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
             if (state.orders.isEmpty) {
               return _buildEmptyOrders();
             }
+            final listOrders = state.orders.reversed.toList();
             return ListView.builder(
               padding: const EdgeInsets.all(24),
-              itemCount: state.orders.length,
+              itemCount: listOrders.length,
               itemBuilder: (context, index) {
-                final order = state.orders[index];
+                
+                final order = listOrders[index];
                 return OrderItemWidget(order: order);
               },
             );

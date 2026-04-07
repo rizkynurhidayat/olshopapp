@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/order_model.dart';
 
@@ -9,17 +8,54 @@ abstract class OrderLocalDataSource {
 
 class OrderLocalDataSourceImpl implements OrderLocalDataSource {
   static const String _orderBoxName = 'orderBox';
+  Box? _box;
+
+  Future<Box> _openBox() async {
+    if (_box == null || !_box!.isOpen) {
+      _box = await Hive.openBox(_orderBoxName);
+    }
+    return _box!;
+  }
 
   @override
   Future<List<OrderModel>> getOrders() async {
-    final box = await Hive.openBox(_orderBoxName);
-    final List<dynamic> ordersJson = box.values.toList();
-    return ordersJson.map((json) => OrderModel.fromJson(Map<String, dynamic>.from(json))).toList();
+    try {
+      final box = await _openBox();
+      final List<dynamic> ordersList = box.values.toList();
+      return ordersList.map((orderData) {
+        final Map<String, dynamic> mappedData = _convertToMap(orderData);
+        return OrderModel.fromJson(mappedData);
+      }).toList();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
   Future<void> saveOrder(OrderModel order) async {
-    final box = await Hive.openBox(_orderBoxName);
-    await box.add(order.toJson());
+    try {
+      final box = await _openBox();
+      await box.add(order.toJson());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Map<String, dynamic> _convertToMap(dynamic data) {
+    if (data is Map) {
+      return Map<String, dynamic>.from(
+        data.map((key, value) => MapEntry(key.toString(), _processValue(value))),
+      );
+    }
+    return {};
+  }
+
+  dynamic _processValue(dynamic value) {
+    if (value is Map) {
+      return _convertToMap(value);
+    } else if (value is List) {
+      return value.map((e) => _processValue(e)).toList();
+    }
+    return value;
   }
 }

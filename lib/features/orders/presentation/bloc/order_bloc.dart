@@ -64,7 +64,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       emit(OrderLoading());
       final failureOrOrders = await getOrders(NoParams());
       failureOrOrders.fold(
-        (failure) => emit(const OrderError('Could not fetch orders')),
+        (failure) => emit(OrderError(failure.message)),
         (orders) => emit(OrderLoaded(orders)),
       );
     });
@@ -72,7 +72,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<AddOrder>((event, emit) async {
       final failureOrSuccess = await saveOrder(event.order);
       failureOrSuccess.fold(
-        (failure) => emit(const OrderError('Could not save order')),
+        (failure) => emit(OrderError(failure.message)),
         (_) => add(FetchOrders()),
       );
     });

@@ -7,8 +7,15 @@ import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
 import '../bloc/cart_state.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
+
+  @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  String selectedPaymentMethod = 'Credit Card';
 
   @override
   Widget build(BuildContext context) {
@@ -75,19 +82,22 @@ class CheckoutPage extends StatelessWidget {
                             _buildPaymentOption(
                               icon: Icons.credit_card,
                               title: 'Credit Card',
-                              isSelected: true,
+                              isSelected: selectedPaymentMethod == 'Credit Card',
+                              onTap: () => setState(() => selectedPaymentMethod = 'Credit Card'),
                             ),
                             const Divider(height: 24),
                             _buildPaymentOption(
                               icon: Icons.account_balance_wallet_outlined,
                               title: 'Digital Wallet',
-                              isSelected: false,
+                              isSelected: selectedPaymentMethod == 'Digital Wallet',
+                              onTap: () => setState(() => selectedPaymentMethod = 'Digital Wallet'),
                             ),
                             const Divider(height: 24),
                             _buildPaymentOption(
                               icon: Icons.payments_outlined,
                               title: 'Cash on Delivery',
-                              isSelected: false,
+                              isSelected: selectedPaymentMethod == 'Cash on Delivery',
+                              onTap: () => setState(() => selectedPaymentMethod = 'Cash on Delivery'),
                             ),
                           ],
                         ),
@@ -163,47 +173,55 @@ class CheckoutPage extends StatelessWidget {
     required IconData icon,
     required String title,
     required bool isSelected,
+    required VoidCallback onTap,
   }) {
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.primaryPink.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: AppColors.primaryPink),
-        ),
-        const SizedBox(width: 16),
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-        const Spacer(),
-        Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: isSelected ? AppColors.primaryPink : Colors.grey.shade300,
-              width: 2,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.primaryPink.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: AppColors.primaryPink),
             ),
-          ),
-          child: isSelected
-              ? Center(
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primaryPink,
-                    ),
-                  ),
-                )
-              : null,
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+            const Spacer(),
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? AppColors.primaryPink : Colors.grey.shade300,
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? Center(
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primaryPink,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
