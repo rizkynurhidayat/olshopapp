@@ -12,12 +12,60 @@ class CartPage extends StatelessWidget {
   const CartPage({super.key, this.isContent = false});
 
   void _showDeleteConfirmation(BuildContext context, String productName, VoidCallback onConfirm) {
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     title: const Text('Remove Product'),
+    //     content: Text('Are you sure you want to remove "$productName" from your cart?'),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.pop(context),
+    //         child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           onConfirm();
+    //           Navigator.pop(context);
+    //         },
+    //         child: const Text('Remove', style: TextStyle(color: Colors.red)),
+    //       ),
+    //     ],
+    //   ),
+    // );
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Remove Product'),
-        content: Text('Are you sure you want to remove "$productName" from your cart?'),
-        actions: [
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green.shade50,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.info_outline_rounded, color: Colors.blue, size: 60),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Delete Product!',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Are you sure you want to remove "$productName" from your cart?',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+            ),
+            const SizedBox(height: 32),
+            
+          ],
+        ),
+      
+       actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel', style: TextStyle(color: Colors.grey)),

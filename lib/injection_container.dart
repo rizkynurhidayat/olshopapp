@@ -7,6 +7,12 @@ import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/register.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/cart/presentation/bloc/cart_bloc.dart';
+import 'features/orders/data/datasources/order_local_data_source.dart';
+import 'features/orders/data/repositories/order_repository_impl.dart';
+import 'features/orders/domain/repositories/order_repository.dart';
+import 'features/orders/domain/usecases/get_orders.dart';
+import 'features/orders/domain/usecases/save_order.dart';
+import 'features/orders/presentation/bloc/order_bloc.dart';
 import 'features/shop/data/datasources/shop_remote_data_source.dart';
 import 'features/shop/data/repositories/shop_repository_impl.dart';
 import 'features/shop/domain/repositories/shop_repository.dart';
@@ -37,6 +43,13 @@ Future<void> init() async {
 
   // Features - Cart
   sl.registerFactory(() => CartBloc(localStorage: sl()));
+
+  // Features - Orders
+  sl.registerFactory(() => OrderBloc(getOrders: sl(), saveOrder: sl()));
+  sl.registerLazySingleton(() => GetOrders(sl()));
+  sl.registerLazySingleton(() => SaveOrder(sl()));
+  sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(localDataSource: sl()));
+  sl.registerLazySingleton<OrderLocalDataSource>(() => OrderLocalDataSourceImpl());
 
   // External
   sl.registerLazySingleton(() => Dio());

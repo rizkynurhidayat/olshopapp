@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/core/themes/theme.dart';
+import '../../../orders/domain/entities/order.dart';
+import '../../../orders/presentation/bloc/order_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
 import '../bloc/cart_state.dart';
@@ -41,7 +43,6 @@ class CheckoutPage extends StatelessWidget {
                                   borderSide: BorderSide.none,
                                 ),
                                 filled: true,
-                                // fillSide: BorderSide.none,
                                 fillColor: AppColors.background.withOpacity(0.5),
                               ),
                             ),
@@ -233,37 +234,54 @@ class CheckoutPage extends StatelessWidget {
   }
 
   Widget _buildBottomAction(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceWhite,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceWhite,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          height: 55,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryPink,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 0,
-            ),
-            onPressed: () => _showSuccessDialog(context),
-            child: const Text(
-              'Confirm Order',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          child: SafeArea(
+            child: SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryPink,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                ),
+                onPressed: () {
+                  final order = OrderEntity(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    items: state.items.map((item) => OrderItemEntity(
+                      product: item.product,
+                      quantity: item.quantity,
+                    )).toList(),
+                    totalPrice: state.totalPrice + 15.000,
+                    date: DateTime.now(),
+                    status: 'Processing',
+                  );
+                  context.read<OrderBloc>().add(AddOrder(order));
+                  _showSuccessDialog(context);
+                },
+                child: const Text(
+                  'Confirm Order',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

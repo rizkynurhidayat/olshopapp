@@ -6,6 +6,7 @@ import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/shop/presentation/bloc/shop_bloc.dart';
 import 'features/cart/presentation/bloc/cart_bloc.dart';
+import 'features/orders/presentation/bloc/order_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/pages/splash_page.dart';
 import 'main_page.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<AuthBloc>()..add(AppStarted())),
         BlocProvider(create: (_) => di.sl<ShopBloc>()),
         BlocProvider(create: (_) => di.sl<CartBloc>()),
+        BlocProvider(create: (_) => di.sl<OrderBloc>()),
       ],
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

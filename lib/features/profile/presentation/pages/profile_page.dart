@@ -5,6 +5,7 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../auth/presentation/pages/login_page.dart';
+import '../../../orders/presentation/pages/order_history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final bool isContent;
@@ -81,18 +82,23 @@ class ProfilePage extends StatelessWidget {
 
                 // Account Settings
                 _buildMenuSection('Account Settings', [
-                  _buildMenuItem(Icons.person_outline, 'Personal Information'),
-                  _buildMenuItem(Icons.shopping_basket_outlined, 'My Orders'),
-                  _buildMenuItem(Icons.favorite_outline, 'My Wishlist'),
+                  _buildMenuItem(Icons.person_outline, 'Personal Information', () {}),
+                  _buildMenuItem(Icons.shopping_basket_outlined, 'My Orders', () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const OrderHistoryPage()),
+                    );
+                  }),
+                  _buildMenuItem(Icons.favorite_outline, 'My Wishlist', () {}),
                 ]),
 
                 const SizedBox(height: 24),
 
                 // General Settings
                 _buildMenuSection('General', [
-                  _buildMenuItem(Icons.notifications_outlined, 'Notifications'),
-                  _buildMenuItem(Icons.security_outlined, 'Security'),
-                  _buildMenuItem(Icons.help_outline, 'Help & Support'),
+                  _buildMenuItem(Icons.notifications_outlined, 'Notifications', () {}),
+                  _buildMenuItem(Icons.security_outlined, 'Security', () {}),
+                  _buildMenuItem(Icons.help_outline, 'Help & Support', () {}),
                 ]),
 
                 const SizedBox(height: 32), 
@@ -170,7 +176,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title) {
+  Widget _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
@@ -182,7 +188,7 @@ class ProfilePage extends StatelessWidget {
       ),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }
