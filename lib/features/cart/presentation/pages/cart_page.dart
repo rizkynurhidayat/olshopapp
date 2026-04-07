@@ -26,8 +26,8 @@ class CartPage extends StatelessWidget {
             ),
           );
         }
-
-        return Column(
+        
+                return Column(
           children: [
             Expanded(
               child: ListView.builder(
@@ -35,6 +35,7 @@ class CartPage extends StatelessWidget {
                 itemCount: state.items.length,
                 itemBuilder: (context, index) {
                   final item = state.items[index];
+                 
                   return Container(
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(12),

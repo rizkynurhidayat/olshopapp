@@ -6,7 +6,8 @@ import '../../domain/entities/message.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+  final bool isContent;
+  const ChatPage({super.key, this.isContent = false});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -30,6 +31,35 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final body = Column(
+      children: [
+        Expanded(
+          child: BlocConsumer<ChatBloc, ChatState>(
+            listener: (context, state) => _scrollToBottom(),
+            builder: (context, state) {
+              return ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(20),
+                itemCount: state.messages.length,
+                itemBuilder: (context, index) {
+                  final message = state.messages[index];
+                  return _buildMessageBubble(message);
+                },
+              );
+            },
+          ),
+        ),
+        _buildInputArea(context),
+      ],
+    );
+
+    if (widget.isContent) {
+      return BlocProvider(
+        create: (context) => ChatBloc(),
+        child: body,
+      );
+    }
+
     return BlocProvider(
       create: (context) => ChatBloc(),
       child: Builder(
@@ -83,27 +113,7 @@ class _ChatPageState extends State<ChatPage> {
                 IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
               ],
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: BlocConsumer<ChatBloc, ChatState>(
-                    listener: (context, state) => _scrollToBottom(),
-                    builder: (context, state) {
-                      return ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.all(20),
-                        itemCount: state.messages.length,
-                        itemBuilder: (context, index) {
-                          final message = state.messages[index];
-                          return _buildMessageBubble(message);
-                        },
-                      );
-                    },
-                  ),
-                ),
-                _buildInputArea(context),
-              ],
-            ),
+            body: body,
           );
         }
       ),

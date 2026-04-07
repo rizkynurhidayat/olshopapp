@@ -7,11 +7,8 @@ import '../bloc/shop_bloc.dart';
 import '../bloc/shop_event.dart';
 import '../bloc/shop_state.dart';
 import 'search_page.dart';
-import '../../../cart/presentation/pages/cart_page.dart';
-import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
-import '../../../chat/presentation/pages/chat_page.dart';
 
 class HomePage extends StatefulWidget {
   final bool isContent;
@@ -89,12 +86,9 @@ class _HomePageState extends State<HomePage> {
                     options: CarouselOptions(
                       height: 180.0,
                       autoPlay: true,
-                      // enlargeCenterPage: true,
                       aspectRatio: 16 / 9,
                       viewportFraction: 0.85,
-                      
                     ),
-                    
                     items: bannerImages.map((imageUrl) {
                       return Builder(
                         builder: (BuildContext context) {
@@ -194,37 +188,13 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Beauty Shop',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Beauty Shop', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const SearchPage()),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.chat_bubble_outline),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ChatPage()),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const CartPage()),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ProfilePage()),
             ),
           ),
         ],

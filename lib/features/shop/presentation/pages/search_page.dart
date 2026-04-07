@@ -54,7 +54,7 @@ class SearchPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.75,
+              childAspectRatio: 0.55,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
             ),

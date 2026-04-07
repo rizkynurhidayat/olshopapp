@@ -22,8 +22,9 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
     const HomePageContent(),
     const SearchPageContent(),
+    const ChatPageContent(),
     const CartPageContent(),
-    // const ChatPage(),
+    const ProfilePageContent(),
   ];
 
   @override
@@ -48,25 +49,8 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfilePage()),
-              ),
-              child: CircleAvatar(
-                backgroundColor: AppColors.surfaceWhite,
-                backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1518455027359-f3f816b1a22a?q=80&w=300&h=400&fit=crop',
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
-      body: _pages[_selectedIndex],
+      body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: const BoxDecoration(
@@ -87,11 +71,20 @@ class _MainPageState extends State<MainPage> {
               _buildNavItem(icon: Icons.home_rounded, index: 0),
               _buildNavItem(icon: Icons.search_rounded, index: 1),
               _buildNavItem(
-                icon: Icons.shopping_cart_outlined,
+                icon: Icons.chat_bubble_outline_rounded,
                 index: 2,
+                isChat: true,
+              ),
+              _buildNavItem(
+                icon: Icons.shopping_cart_outlined,
+                index: 3,
                 isCart: true,
               ),
-              _buildNavItem(icon: Icons.chat_bubble_outline_rounded, index: 3, isChat: true),
+              _buildNavItem(
+                icon: Icons.person_outline_rounded,
+                index: 4,
+                isProfile: true,
+              ),
             ],
           ),
         ),
@@ -104,15 +97,22 @@ class _MainPageState extends State<MainPage> {
     required int index,
     bool isCart = false,
     bool isChat = false,
+    bool isProfile = false,
   }) {
     final bool isActive = _selectedIndex == index;
 
     return GestureDetector(
       onTap: () {
+        
         if (isChat) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const ChatPage()),
+          );
+        } else if (isProfile) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ProfilePage()),
           );
         } else {
           setState(() {
@@ -198,6 +198,14 @@ class SearchPageContent extends StatelessWidget {
   }
 }
 
+class ChatPageContent extends StatelessWidget {
+  const ChatPageContent({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const ChatPage(isContent: true);
+  }
+}
+
 class CartPageContent extends StatelessWidget {
   const CartPageContent({super.key});
   @override
@@ -206,15 +214,10 @@ class CartPageContent extends StatelessWidget {
   }
 }
 
-// class ChatPlaceholder extends StatelessWidget {
-//   const ChatPlaceholder({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(
-//       child: Text(
-//         'Halaman Chat',
-//         style: TextStyle(color: AppColors.primaryText),
-//       ),
-//     );
-//   }
-// }
+class ProfilePageContent extends StatelessWidget {
+  const ProfilePageContent({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return const ProfilePage(isContent: true);
+  }
+}
