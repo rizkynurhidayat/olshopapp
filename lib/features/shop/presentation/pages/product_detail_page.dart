@@ -29,6 +29,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ...widget.product.carouselImages.where((img) => img != widget.product.image),
     ];
 
+    final price = widget.product.discountPrice ?? widget.product.price;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
@@ -188,7 +190,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Row(
                     children: [
                       Text(
-                        "Rp. ${widget.product.discountPrice ?? widget.product.price}",
+                        "Rp. ${price.toStringAsFixed(3)}",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -198,7 +200,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       if (widget.product.discountPrice != null) ...[
                         const SizedBox(width: 12),
                         Text(
-                          "Rp. ${widget.product.price}",
+                          "Rp. ${widget.product.price.toStringAsFixed(3)}",
                           style: TextStyle(
                             fontSize: 16,
                             color: AppColors.secondaryText,

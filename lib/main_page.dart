@@ -68,21 +68,25 @@ class _MainPageState extends State<MainPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildNavItem(icon: Icons.home_rounded, index: 0),
-              _buildNavItem(icon: Icons.search_rounded, index: 1),
+              _buildNavItem(icon: Icons.home_rounded, index: 0, label: 'Home'),
+              _buildNavItem(
+                  icon: Icons.search_rounded, index: 1, label: 'Search'),
               _buildNavItem(
                 icon: Icons.chat_bubble_outline_rounded,
                 index: 2,
+                label: 'Chat',
                 isChat: true,
               ),
               _buildNavItem(
                 icon: Icons.shopping_cart_outlined,
                 index: 3,
+                label: 'Cart',
                 isCart: true,
               ),
               _buildNavItem(
                 icon: Icons.person_outline_rounded,
                 index: 4,
+                label: 'Profile',
                 isProfile: true,
               ),
             ],
@@ -95,6 +99,7 @@ class _MainPageState extends State<MainPage> {
   Widget _buildNavItem({
     required IconData icon,
     required int index,
+    required String label,
     bool isCart = false,
     bool isChat = false,
     bool isProfile = false,
@@ -103,7 +108,6 @@ class _MainPageState extends State<MainPage> {
 
     return GestureDetector(
       onTap: () {
-        
         if (isChat) {
           Navigator.push(
             context,
@@ -121,62 +125,77 @@ class _MainPageState extends State<MainPage> {
         }
       },
       behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isActive ? AppColors.primaryPink : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? Colors.white : AppColors.secondaryText,
-              size: 24,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isActive ? AppColors.primaryPink : Colors.transparent,
+              shape: BoxShape.circle,
             ),
-            if (isCart)
-              BlocBuilder<CartBloc, CartState>(
-                builder: (context, state) {
-                  if (state.items.isEmpty) return const SizedBox.shrink();
-                  return Positioned(
-                    right: -4,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: isActive ? Colors.white : AppColors.primaryPink,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: isActive
-                              ? AppColors.primaryPink
-                              : Colors.white,
-                          width: 1,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  icon,
+                  color: isActive ? Colors.white : AppColors.secondaryText,
+                  size: 24,
+                ),
+                if (isCart)
+                  BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) {
+                      if (state.items.isEmpty) return const SizedBox.shrink();
+                      return Positioned(
+                        right: -4,
+                        top: -4,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color:
+                                isActive ? Colors.white : AppColors.primaryPink,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: isActive
+                                  ? AppColors.primaryPink
+                                  : Colors.white,
+                              width: 1,
+                            ),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 14,
+                            minHeight: 14,
+                          ),
+                          child: Text(
+                            '${state.items.length}',
+                            style: TextStyle(
+                              color: isActive
+                                  ? AppColors.primaryPink
+                                  : Colors.white,
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 14,
-                        minHeight: 14,
-                      ),
-                      child: Text(
-                        '${state.items.length}',
-                        style: TextStyle(
-                          color: isActive
-                              ? AppColors.primaryPink
-                              : Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? AppColors.primaryPink : AppColors.secondaryText,
+              fontSize: 10,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -15,6 +15,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final price = product.discountPrice ?? product.price;
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -104,7 +105,7 @@ class ProductCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              "Rp. ${product.discountPrice ?? product.price}",
+              "Rp. ${price.toStringAsFixed(3)}",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
