@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/features/shop/presentation/widgets/product.dart';
-import '../../../../core/themes/theme.dart';
-import '../bloc/shop_bloc.dart';
-import '../bloc/shop_event.dart';
-import '../bloc/shop_state.dart';
-import '../../../cart/presentation/bloc/cart_bloc.dart';
-import '../../../cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/shop/presentation/widgets/product.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_bloc.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_event.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_state.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
 
 class SearchPage extends StatelessWidget {
   final bool isContent;

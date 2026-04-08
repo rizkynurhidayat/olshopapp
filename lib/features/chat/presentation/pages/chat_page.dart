@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/core/themes/theme.dart';
-import '../bloc/chat_bloc.dart';
-import '../../domain/entities/message.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/chat/presentation/bloc/chat_bloc.dart';
+import 'package:olshopapp/features/chat/domain/entities/message.dart';
 import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {

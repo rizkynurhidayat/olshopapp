@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '/features/shop/domain/entities/product.dart';
-import '/features/shop/presentation/pages/product_detail_page.dart';
-import '../../../../core/themes/theme.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/presentation/pages/product_detail_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -100,6 +100,8 @@ class ProductCard extends StatelessWidget {
                     fontSize: 10,
                     color: AppColors.secondaryText,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

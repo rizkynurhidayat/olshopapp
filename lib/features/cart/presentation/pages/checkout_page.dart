@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/core/themes/theme.dart';
-import '../../../orders/domain/entities/order.dart';
-import '../../../orders/presentation/bloc/order_bloc.dart';
-import '../bloc/cart_bloc.dart';
-import '../bloc/cart_event.dart';
-import '../bloc/cart_state.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
+import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});

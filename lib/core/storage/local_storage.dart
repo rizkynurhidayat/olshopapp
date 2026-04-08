@@ -1,11 +1,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../features/auth/domain/entities/user.dart';
-import '../../features/cart/domain/entities/cart_item.dart';
-import '../../features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/auth/domain/entities/user.dart';
+import 'package:olshopapp/features/cart/domain/entities/cart_item.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 class LocalStorage {
   static const String _userBoxName = 'userBox';
-  static const String _cartBoxName = 'cartBox';
   static const String _sessionKey = 'session';
 
   Future<void> init() async {
@@ -17,7 +16,6 @@ class LocalStorage {
     if (!Hive.isAdapterRegistered(2)) Hive.registerAdapter(CartItemAdapter());
 
     await Hive.openBox<User>(_userBoxName);
-    await Hive.openBox<CartItem>(_cartBoxName);
   }
 
   // User Session
@@ -36,22 +34,33 @@ class LocalStorage {
     await box.delete(_sessionKey);
   }
 
-  // Cart Data
+  // Cart Data - User Specific
+  String _getCartBoxName(String userId) => 'cartBox_$userId';
+
   Future<void> saveCartItems(List<CartItem> items) async {
-    final box = Hive.box<CartItem>(_cartBoxName);
+    final user = getUser();
+    if (user == null) return;
+    
+    final box = await Hive.openBox<CartItem>(_getCartBoxName(user.id));
     await box.clear();
     for (var item in items) {
       await box.add(item);
     }
   }
 
-  List<CartItem> getCartItems() {
-    final box = Hive.box<CartItem>(_cartBoxName);
+  Future<List<CartItem>> getCartItems() async {
+    final user = getUser();
+    if (user == null) return [];
+    
+    final box = await Hive.openBox<CartItem>(_getCartBoxName(user.id));
     return box.values.toList();
   }
 
   Future<void> clearCart() async {
-    final box = Hive.box<CartItem>(_cartBoxName);
+    final user = getUser();
+    if (user == null) return;
+    
+    final box = await Hive.openBox<CartItem>(_getCartBoxName(user.id));
     await box.clear();
   }
 }

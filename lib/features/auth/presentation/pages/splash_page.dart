@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/themes/theme.dart';
+import 'package:olshopapp/core/themes/theme.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/themes/theme.dart';
-import 'features/chat/presentation/pages/chat_page.dart';
-import 'features/profile/presentation/pages/profile_page.dart';
-import 'features/shop/presentation/pages/home_page.dart';
-import 'features/shop/presentation/pages/search_page.dart';
-import 'features/cart/presentation/pages/cart_page.dart';
-import 'features/cart/presentation/bloc/cart_bloc.dart';
-import 'features/cart/presentation/bloc/cart_state.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/chat/presentation/pages/chat_page.dart';
+import 'package:olshopapp/features/profile/presentation/pages/profile_page.dart';
+import 'package:olshopapp/features/shop/presentation/pages/home_page.dart';
+import 'package:olshopapp/features/shop/presentation/pages/search_page.dart';
+import 'package:olshopapp/features/cart/presentation/pages/cart_page.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
+import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -18,6 +22,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CartBloc>().add(LoadCart());
+    context.read<OrderBloc>().add(FetchOrders());
+  }
 
   final List<Widget> _pages = [
     const HomePageContent(),
@@ -31,23 +42,31 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Choose your skincare!',
-              style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Hi, Rizky ',
-              style: TextStyle(
-                color: AppColors.primaryText,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        title: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            String name = 'User';
+            if (state is Authenticated) {
+              name = state.user.name;
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Choose your skincare!',
+                  style: TextStyle(color: AppColors.secondaryText, fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Hi, $name',
+                  style: const TextStyle(
+                    color: AppColors.primaryText,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
       body: IndexedStack(index: _selectedIndex, children: _pages),

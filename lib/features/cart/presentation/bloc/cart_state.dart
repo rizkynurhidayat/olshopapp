@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/cart_item.dart';
+import 'package:olshopapp/features/cart/domain/entities/cart_item.dart';
 
 class CartState extends Equatable {
   final List<CartItem> items;

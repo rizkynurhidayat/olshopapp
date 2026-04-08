@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 abstract class ShopState extends Equatable {
   @override

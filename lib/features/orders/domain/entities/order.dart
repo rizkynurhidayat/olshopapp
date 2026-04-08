@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 class OrderEntity extends Equatable {
   final String id;

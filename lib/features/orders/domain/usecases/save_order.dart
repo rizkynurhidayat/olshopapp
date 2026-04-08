@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../entities/order.dart';
-import '../repositories/order_repository.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/core/usecase/usecase.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
+import 'package:olshopapp/features/orders/domain/repositories/order_repository.dart';
 
 class SaveOrder implements UseCase<void, OrderEntity> {
   final OrderRepository repository;

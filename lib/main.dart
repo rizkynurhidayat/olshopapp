@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'injection_container.dart' as di;
-import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/auth/presentation/bloc/auth_state.dart';
-import 'features/shop/presentation/bloc/shop_bloc.dart';
-import 'features/cart/presentation/bloc/cart_bloc.dart';
-import 'features/orders/presentation/bloc/order_bloc.dart';
-import 'features/auth/presentation/pages/login_page.dart';
-import 'features/auth/presentation/pages/splash_page.dart';
-import 'main_page.dart';
-import 'core/themes/theme.dart';
+import 'package:olshopapp/injection_container.dart' as di;
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/pages/login_page.dart';
+import 'package:olshopapp/features/auth/presentation/pages/splash_page.dart';
+import 'package:olshopapp/main_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

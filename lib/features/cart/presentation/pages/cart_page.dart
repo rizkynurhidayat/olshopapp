@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/core/themes/theme.dart';
-import '../bloc/cart_bloc.dart';
-import '../bloc/cart_event.dart';
-import '../bloc/cart_state.dart';
-import 'checkout_page.dart';
-import '../../../shop/presentation/pages/product_detail_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
+import 'package:olshopapp/features/cart/presentation/pages/checkout_page.dart';
+import 'package:olshopapp/features/shop/presentation/pages/product_detail_page.dart';
 
 class CartPage extends StatelessWidget {
   final bool isContent;

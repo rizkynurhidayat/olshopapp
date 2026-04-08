@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '/core/themes/theme.dart';
-import '../../domain/entities/product.dart';
-import '../../../cart/presentation/bloc/cart_bloc.dart';
-import '../../../cart/presentation/bloc/cart_event.dart';
-import '../../../cart/presentation/pages/checkout_page.dart';
-import '../../../chat/presentation/pages/chat_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/pages/checkout_page.dart';
+import 'package:olshopapp/features/chat/presentation/pages/chat_page.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;

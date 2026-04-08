@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/storage/local_storage.dart';
-import '../../domain/usecases/login.dart';
-import '../../domain/usecases/register.dart';
-import 'auth_event.dart';
-import 'auth_state.dart';
+import 'package:olshopapp/core/storage/local_storage.dart';
+import 'package:olshopapp/features/auth/domain/usecases/login.dart';
+import 'package:olshopapp/features/auth/domain/usecases/register.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;

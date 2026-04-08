@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/entities/product.dart';
-import '../../domain/repositories/shop_repository.dart';
-import '../datasources/shop_remote_data_source.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/repositories/shop_repository.dart';
+import 'package:olshopapp/features/shop/data/datasources/shop_remote_data_source.dart';
 
 class ShopRepositoryImpl implements ShopRepository {
   final ShopRemoteDataSource remoteDataSource;
@@ -16,6 +16,16 @@ class ShopRepositoryImpl implements ShopRepository {
       return Right(remoteProducts);
     } catch (e) {
       return const Left(ServerFailure('Failed to fetch products'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Product>> getProductById(String id) async {
+    try {
+      final remoteProduct = await remoteDataSource.getProductById(id);
+      return Right(remoteProduct);
+    } catch (e) {
+      return const Left(ServerFailure('Failed to fetch product detail'));
     }
   }
 

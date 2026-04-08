@@ -1,5 +1,5 @@
-import '../../domain/entities/order.dart';
-import '../../../shop/data/models/product_model.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
+import 'package:olshopapp/features/shop/data/models/product_model.dart';
 
 class OrderModel extends OrderEntity {
   const OrderModel({

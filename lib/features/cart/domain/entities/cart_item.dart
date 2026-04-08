@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import '../../../shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 part 'cart_item.g.dart';
 
