@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/storage/local_storage.dart';
-import '../../domain/entities/cart_item.dart';
-import 'cart_event.dart';
-import 'cart_state.dart';
+import 'package:olshopapp/core/storage/local_storage.dart';
+import 'package:olshopapp/features/cart/domain/entities/cart_item.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   final LocalStorage localStorage;

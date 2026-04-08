@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../features/auth/domain/entities/user.dart';
-import '../../features/cart/domain/entities/cart_item.dart';
-import '../../features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/auth/domain/entities/user.dart';
+import 'package:olshopapp/features/cart/domain/entities/cart_item.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 class LocalStorage {
   static const String _userBoxName = 'userBox';

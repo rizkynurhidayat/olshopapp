@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../entities/product.dart';
-import '../repositories/shop_repository.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/core/usecase/usecase.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/repositories/shop_repository.dart';
 
 class GetProducts implements UseCase<List<Product>, NoParams> {
   final ShopRepository repository;

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/message.dart';
+import 'package:olshopapp/features/chat/domain/entities/message.dart';
 
 // Events
 abstract class ChatEvent {}

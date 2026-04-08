@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/themes/theme.dart';
-import '../../domain/entities/order.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
 
 class OrderItemWidget extends StatelessWidget {
   final OrderEntity order;

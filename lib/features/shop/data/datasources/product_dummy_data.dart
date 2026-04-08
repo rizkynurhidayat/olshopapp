@@ -1,13 +1,13 @@
-import '../models/product_model.dart';
+import 'package:olshopapp/features/shop/data/models/product_model.dart';
 
 class ProductDummyData {
   static const List<ProductModel> products = [
     ProductModel(
-      id: 1,
+      id: "1",
       title: "Premium Leather Jacket",
       price: 150.000,
       discountPrice: 120.000,
-      description: "A high-quality leather jacket that keeps you warm and stylish. Made from genuine cowhide leather.",
+      description: "A high-quality leather jacket that keeps you warm and stylish. Made from genuine cowhide leather",
       category: "Men's Clothing",
       image: "https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?q=80&w=300&h=400&fit=crop",
       carouselImages: [
@@ -19,7 +19,7 @@ class ProductDummyData {
       soldCount: 150,
     ),
     ProductModel(
-      id: 2,
+      id: "2",
       title: "Modern Minimalist Watch",
       price: 100.000,
       discountPrice: 85.000,
@@ -35,7 +35,7 @@ class ProductDummyData {
       soldCount: 320,
     ),
     ProductModel(
-      id: 3,
+      id: "3",
       title: "Pro Wireless Headphones",
       price: 150.000,
       discountPrice: 19.000,
@@ -51,7 +51,7 @@ class ProductDummyData {
       soldCount: 540,
     ),
     ProductModel(
-      id: 4,
+      id: "4",
       title: "Running Sneakers X1",
       price: 120.000,
       discountPrice: 95.000,
@@ -67,7 +67,7 @@ class ProductDummyData {
       soldCount: 210,
     ),
     ProductModel(
-      id: 5,
+      id: "5",
       title: "Organic Cotton T-Shirt",
       price: 35.000,
       discountPrice: 25.000,
@@ -83,7 +83,7 @@ class ProductDummyData {
       soldCount: 430,
     ),
     ProductModel(
-      id: 6,
+      id: "6,",
       title: "Smart Ergonomic Desk",
       price: 600.000,
       discountPrice: 450.000,
@@ -100,7 +100,7 @@ class ProductDummyData {
     ),
     // Additional items for pagination
     ProductModel(
-      id: 7,
+      id: "7,",
       title: "Moisturizing Cream",
       price: 25.000,
       discountPrice: 19.000,
@@ -112,7 +112,7 @@ class ProductDummyData {
       soldCount: 120,
     ),
     ProductModel(
-      id: 8,
+      id: "8,",
       title: "Night Serum",
       price: 45.000,
       discountPrice: 35.000,
@@ -124,7 +124,7 @@ class ProductDummyData {
       soldCount: 95,
     ),
     ProductModel(
-      id: 9,
+      id: "9,",
       title: "Sunscreen SPF 50",
       price: 15.000,
       discountPrice: 12.000,
@@ -136,7 +136,7 @@ class ProductDummyData {
       soldCount: 300,
     ),
     ProductModel(
-      id: 10,
+      id: "10",
       title: "Facial Wash",
       price: 10.000,
       discountPrice: 8.000,
@@ -148,7 +148,7 @@ class ProductDummyData {
       soldCount: 450,
     ),
     ProductModel(
-      id: 11,
+      id: "11",
       title: "Body Lotion",
       price: 12.000,
       discountPrice: 9.000,
@@ -160,7 +160,7 @@ class ProductDummyData {
       soldCount: 200,
     ),
     ProductModel(
-      id: 12,
+      id: "12",
       title: "Matte Lipstick",
       price: 18.000,
       discountPrice: 14.000,
@@ -172,7 +172,7 @@ class ProductDummyData {
       soldCount: 600,
     ),
     ProductModel(
-      id: 13,
+      id: "13",
       title: "Eyeliner Pen",
       price: 8.000,
       discountPrice: 6.000,
@@ -184,7 +184,7 @@ class ProductDummyData {
       soldCount: 150,
     ),
     ProductModel(
-      id: 14,
+      id: "14",
       title: "Face Powder",
       price: 20.000,
       discountPrice: 15.000,
@@ -196,7 +196,7 @@ class ProductDummyData {
       soldCount: 280,
     ),
     ProductModel(
-      id: 15,
+      id: "15",
       title: "Perfume - Floral",
       price: 80.000,
       discountPrice: 65.000,
@@ -208,7 +208,7 @@ class ProductDummyData {
       soldCount: 75,
     ),
     ProductModel(
-      id: 16,
+      id: "16",
       title: "Conditioner",
       price: 15.000,
       discountPrice: 11.000,
@@ -220,7 +220,7 @@ class ProductDummyData {
       soldCount: 180,
     ),
     ProductModel(
-      id: 17,
+      id: "17",
       title: "Shampoo - Anti Dandruff",
       price: 14.000,
       discountPrice: 10.000,
@@ -232,7 +232,7 @@ class ProductDummyData {
       soldCount: 220,
     ),
     ProductModel(
-      id: 18,
+      id: "18",
       title: "Hair Mask",
       price: 22.000,
       discountPrice: 18.000,
@@ -244,7 +244,7 @@ class ProductDummyData {
       soldCount: 110,
     ),
     ProductModel(
-      id: 19,
+      id: "19",
       title: "Nail Polish",
       price: 5.000,
       discountPrice: 3.000,
@@ -256,7 +256,7 @@ class ProductDummyData {
       soldCount: 500,
     ),
     ProductModel(
-      id: 20,
+      id: "20",
       title: "Blush On",
       price: 12.000,
       discountPrice: 9.000,

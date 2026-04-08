@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../entities/user.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/features/auth/domain/entities/user.dart';
 
 abstract class AuthRepository {
   Future<Either<Failure, User>> login(String email, String password);

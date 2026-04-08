@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import '../../../../core/storage/local_storage.dart';
-import '../models/order_model.dart';
+import 'package:olshopapp/core/storage/local_storage.dart';
+import 'package:olshopapp/features/orders/data/models/order_model.dart';
 
 abstract class OrderLocalDataSource {
   Future<List<OrderModel>> getOrders();

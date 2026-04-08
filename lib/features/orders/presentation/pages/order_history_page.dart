@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/themes/theme.dart';
-import '../bloc/order_bloc.dart';
-import '../widgets/order_item.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:olshopapp/features/orders/presentation/widgets/order_item.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   const OrderHistoryPage({super.key});

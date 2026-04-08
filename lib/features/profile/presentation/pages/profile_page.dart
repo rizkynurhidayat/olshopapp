@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/core/themes/theme.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_event.dart';
-import '../../../auth/presentation/bloc/auth_state.dart';
-import '../../../auth/presentation/pages/login_page.dart';
-import '../../../orders/presentation/pages/order_history_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
+import 'package:olshopapp/features/auth/presentation/pages/login_page.dart';
+import 'package:olshopapp/features/orders/presentation/pages/order_history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final bool isContent;

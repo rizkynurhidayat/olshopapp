@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/features/auth/domain/entities/user.dart';
+import 'package:olshopapp/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   @override

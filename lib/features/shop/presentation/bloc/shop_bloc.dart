@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/product.dart';
-import '../../domain/usecases/get_products.dart';
-import '../../domain/usecases/search_products.dart';
-import 'shop_event.dart';
-import 'shop_state.dart';
+import 'package:olshopapp/core/usecase/usecase.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/usecases/get_products.dart';
+import 'package:olshopapp/features/shop/domain/usecases/search_products.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_event.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_state.dart';
 
 class ShopBloc extends Bloc<ShopEvent, ShopState> {
   final GetProducts getProducts;

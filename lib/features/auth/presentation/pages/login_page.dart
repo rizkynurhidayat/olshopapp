@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '/core/themes/theme.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_state.dart';
-import 'register_page.dart';
-import '../../../../main_page.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
+import 'package:olshopapp/features/auth/presentation/pages/register_page.dart';
+import 'package:olshopapp/main_page.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

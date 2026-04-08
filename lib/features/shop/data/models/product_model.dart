@@ -1,4 +1,4 @@
-import '../../domain/entities/product.dart';
+import 'package:olshopapp/features/shop/domain/entities/product.dart';
 
 class ProductModel extends Product {
   const ProductModel({
@@ -15,40 +15,36 @@ class ProductModel extends Product {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    // Handling rating from fakestoreapi structure
-    double ratingValue = 0.0;
-    int countValue = 0;
-    if (json['rating'] != null) {
-      ratingValue = (json['rating']['rate'] as num).toDouble();
-      countValue = (json['rating']['count'] as num).toInt();
-    }
+    List<String> images = [];
+    if (json['img_1'] != null) images.add(json['img_1']);
+    if (json['img_2'] != null) images.add(json['img_2']);
+    if (json['img_3'] != null) images.add(json['img_3']);
 
     return ProductModel(
-      id: json['id'],
-      title: json['title'],
-      price: (json['price'] as num).toDouble(),
-      description: json['description'],
-      category: json['category'],
-      image: json['image'],
-      discountPrice: json['discountPrice'] != null ? (json['discountPrice'] as num).toDouble() : null,
-      carouselImages: json['carouselImages'] != null ? List<String>.from(json['carouselImages']) : [],
-      rating: json['rating_val'] != null ? (json['rating_val'] as num).toDouble() : ratingValue,
-      soldCount: json['soldCount'] != null ? (json['soldCount'] as num).toInt() : countValue,
+      id: json['_id'] ?? '',
+      title: json['name'] ?? '',
+      price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      description: json['description'] ?? '',
+      category: json['categories'] ?? '',
+      image: json['img_1'] ?? '',
+      discountPrice: json['disc_price'] != null ? double.tryParse(json['disc_price'].toString()) : null,
+      carouselImages: images,
+      rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
+      soldCount: int.tryParse(json['sold']?.toString() ?? '0') ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'title': title,
-      'price': price,
+      '_id': id,
+      'name': title,
+      'price': price.toString(),
       'description': description,
-      'category': category,
-      'image': image,
-      'discountPrice': discountPrice,
-      'carouselImages': carouselImages,
-      'rating_val': rating,
-      'soldCount': soldCount,
+      'categories': category,
+      'img_1': image,
+      'disc_price': discountPrice?.toString(),
+      'rating': rating.toString(),
+      'sold': soldCount,
     };
   }
 }

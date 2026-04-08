@@ -4,13 +4,13 @@ import 'package:olshopapp/core/usecase/usecase.dart';
 import 'package:olshopapp/features/shop/domain/entities/product.dart';
 import 'package:olshopapp/features/shop/domain/repositories/shop_repository.dart';
 
-class SearchProducts implements UseCase<List<Product>, String> {
+class GetProductDetail implements UseCase<Product, String> {
   final ShopRepository repository;
 
-  SearchProducts(this.repository);
+  GetProductDetail(this.repository);
 
   @override
-  Future<Either<Failure, List<Product>>> call(String query) async {
-    return await repository.searchProducts(query);
+  Future<Either<Failure, Product>> call(String params) async {
+    return await repository.getProductById(params);
   }
 }

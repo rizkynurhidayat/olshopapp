@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/themes/theme.dart';
-import 'features/chat/presentation/pages/chat_page.dart';
-import 'features/profile/presentation/pages/profile_page.dart';
-import 'features/shop/presentation/pages/home_page.dart';
-import 'features/shop/presentation/pages/search_page.dart';
-import 'features/cart/presentation/pages/cart_page.dart';
-import 'features/cart/presentation/bloc/cart_bloc.dart';
-import 'features/cart/presentation/bloc/cart_event.dart';
-import 'features/cart/presentation/bloc/cart_state.dart';
-import 'features/orders/presentation/bloc/order_bloc.dart';
-import 'features/auth/presentation/bloc/auth_bloc.dart';
-import 'features/auth/presentation/bloc/auth_state.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/chat/presentation/pages/chat_page.dart';
+import 'package:olshopapp/features/profile/presentation/pages/profile_page.dart';
+import 'package:olshopapp/features/shop/presentation/pages/home_page.dart';
+import 'package:olshopapp/features/shop/presentation/pages/search_page.dart';
+import 'package:olshopapp/features/cart/presentation/pages/cart_page.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
+import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/usecase/usecase.dart';
-import '../../domain/entities/order.dart';
-import '../../domain/usecases/get_orders.dart';
-import '../../domain/usecases/save_order.dart';
+import 'package:olshopapp/core/usecase/usecase.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
+import 'package:olshopapp/features/orders/domain/usecases/get_orders.dart';
+import 'package:olshopapp/features/orders/domain/usecases/save_order.dart';
 
 // Events
 abstract class OrderEvent extends Equatable {

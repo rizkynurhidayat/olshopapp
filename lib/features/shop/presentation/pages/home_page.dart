@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../../../../core/themes/theme.dart';
-import '/features/shop/presentation/widgets/product.dart';
-import '../bloc/shop_bloc.dart';
-import '../bloc/shop_event.dart';
-import '../bloc/shop_state.dart';
-import 'search_page.dart';
-import '../../../cart/presentation/bloc/cart_bloc.dart';
-import '../../../cart/presentation/bloc/cart_event.dart';
+import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/shop/presentation/widgets/product.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_bloc.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_event.dart';
+import 'package:olshopapp/features/shop/presentation/bloc/shop_state.dart';
+import 'package:olshopapp/features/shop/presentation/pages/search_page.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
 
 class HomePage extends StatefulWidget {
   final bool isContent;
@@ -30,15 +30,11 @@ class _HomePageState extends State<HomePage> {
 
   final List<String> categories = [
     'All',
-    "Men's Clothing",
-    "Accessories",
-    "Electronics",
-    "Shoes",
-    "Furniture",
     "Skincare",
     "Makeup",
     "Fragrance",
-    "Haircare",
+    "Hair Care",
+    "Body Care",
   ];
 
   @override

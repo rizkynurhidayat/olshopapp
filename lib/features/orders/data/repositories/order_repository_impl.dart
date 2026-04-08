@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/entities/order.dart';
-import '../../domain/repositories/order_repository.dart';
-import '../datasources/order_local_data_source.dart';
-import '../models/order_model.dart';
+import 'package:olshopapp/core/error/failures.dart';
+import 'package:olshopapp/features/orders/domain/entities/order.dart';
+import 'package:olshopapp/features/orders/domain/repositories/order_repository.dart';
+import 'package:olshopapp/features/orders/data/datasources/order_local_data_source.dart';
+import 'package:olshopapp/features/orders/data/models/order_model.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
   final OrderLocalDataSource localDataSource;
