@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:olshopapp/core/usecase/usecase.dart';
 import 'package:olshopapp/features/orders/domain/entities/order.dart';
 import 'package:olshopapp/features/orders/domain/usecases/get_orders.dart';
 import 'package:olshopapp/features/orders/domain/usecases/save_order.dart';
@@ -13,7 +12,14 @@ abstract class OrderEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchOrders extends OrderEvent {}
+class FetchOrders extends OrderEvent {
+  final String uid;
+
+  const FetchOrders(this.uid);
+
+  @override
+  List<Object?> get props => [uid];
+}
 
 class AddOrder extends OrderEvent {
   final OrderEntity order;
@@ -62,7 +68,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc({required this.getOrders, required this.saveOrder}) : super(OrderInitial()) {
     on<FetchOrders>((event, emit) async {
       emit(OrderLoading());
-      final failureOrOrders = await getOrders(NoParams());
+      final failureOrOrders = await getOrders(event.uid);
       failureOrOrders.fold(
         (failure) => emit(OrderError(failure.message)),
         (orders) => emit(OrderLoaded(orders)),
@@ -73,7 +79,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       final failureOrSuccess = await saveOrder(event.order);
       failureOrSuccess.fold(
         (failure) => emit(OrderError(failure.message)),
-        (_) => add(FetchOrders()),
+        (_) => {}, // Logic to refresh after add could be added if uid is available
       );
     });
   }

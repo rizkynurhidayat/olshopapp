@@ -3,20 +3,32 @@ import 'package:olshopapp/core/error/failures.dart';
 import 'package:olshopapp/features/orders/domain/entities/order.dart';
 import 'package:olshopapp/features/orders/domain/repositories/order_repository.dart';
 import 'package:olshopapp/features/orders/data/datasources/order_local_data_source.dart';
+import 'package:olshopapp/features/orders/data/datasources/order_remote_data_source.dart';
 import 'package:olshopapp/features/orders/data/models/order_model.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
   final OrderLocalDataSource localDataSource;
+  final OrderRemoteDataSource remoteDataSource;
 
-  OrderRepositoryImpl({required this.localDataSource});
+  OrderRepositoryImpl({
+    required this.localDataSource,
+    required this.remoteDataSource,
+  });
 
   @override
-  Future<Either<Failure, List<OrderEntity>>> getOrders() async {
+  Future<Either<Failure, List<OrderEntity>>> getOrders(String uid) async {
     try {
-      final orders = await localDataSource.getOrders();
+      final orders = await remoteDataSource.getOrders(uid);
+      // We can also cache them here if needed
       return Right(orders);
     } catch (e) {
-      return Left(CacheFailure('Failed to load orders from cache'));
+      // Fallback to local data if remote fails
+      try {
+        final localOrders = await localDataSource.getOrders();
+        return Right(localOrders);
+      } catch (localError) {
+        return Left(ServerFailure('Failed to load orders from remote and cache'));
+      }
     }
   }
 

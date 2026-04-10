@@ -16,7 +16,6 @@ class AddToCart extends CartEvent {
 }
 
 class RemoveFromCart extends CartEvent {
-  // final int productId;
   final String productId;
   RemoveFromCart(this.productId);
   @override
@@ -24,7 +23,6 @@ class RemoveFromCart extends CartEvent {
 }
 
 class UpdateQuantity extends CartEvent {
-  // final int productId;
   final String productId;
   final int quantity;
   UpdateQuantity(this.productId, this.quantity);
@@ -33,3 +31,37 @@ class UpdateQuantity extends CartEvent {
 }
 
 class ClearCart extends CartEvent {}
+
+class SubmitCart extends CartEvent {
+  final String uid;
+  final String recipientName;
+  final String address;
+  final String paymentMethod;
+  final double subtotal;
+  final double shippingFee;
+  final double discount;
+  final double totalPayment;
+
+  SubmitCart({
+    required this.uid,
+    required this.recipientName,
+    required this.address,
+    required this.paymentMethod,
+    required this.subtotal,
+    required this.shippingFee,
+    required this.discount,
+    required this.totalPayment,
+  });
+
+  @override
+  List<Object?> get props => [
+    uid,
+    recipientName,
+    address,
+    paymentMethod,
+    subtotal,
+    shippingFee,
+    discount,
+    totalPayment,
+  ];
+}

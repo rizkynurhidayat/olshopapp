@@ -11,8 +11,12 @@ import 'package:olshopapp/features/auth/domain/usecases/logout.dart';
 import 'package:olshopapp/features/auth/domain/usecases/register.dart';
 import 'package:olshopapp/features/auth/domain/usecases/social_login.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/cart/data/datasources/cart_remote_data_source.dart';
+import 'package:olshopapp/features/cart/data/repositories/cart_repository_impl.dart';
+import 'package:olshopapp/features/cart/domain/repositories/cart_repository.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:olshopapp/features/orders/data/datasources/order_local_data_source.dart';
+import 'package:olshopapp/features/orders/data/datasources/order_remote_data_source.dart';
 import 'package:olshopapp/features/orders/data/repositories/order_repository_impl.dart';
 import 'package:olshopapp/features/orders/domain/repositories/order_repository.dart';
 import 'package:olshopapp/features/orders/domain/usecases/get_orders.dart';
@@ -61,14 +65,23 @@ Future<void> init() async {
   sl.registerLazySingleton<ShopRemoteDataSource>(() => ShopRemoteDataSourceImpl(dio: sl()));
 
   // Features - Cart
-  sl.registerFactory(() => CartBloc(localStorage: sl()));
+  sl.registerFactory(() => CartBloc(
+        localStorage: sl(),
+        cartRepository: sl(),
+      ));
+  sl.registerLazySingleton<CartRepository>(() => CartRepositoryImpl(remoteDataSource: sl()));
+  sl.registerLazySingleton<CartRemoteDataSource>(() => CartRemoteDataSourceImpl(dio: sl()));
 
   // Features - Orders
   sl.registerFactory(() => OrderBloc(getOrders: sl(), saveOrder: sl()));
   sl.registerLazySingleton(() => GetOrders(sl()));
   sl.registerLazySingleton(() => SaveOrder(sl()));
-  sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(localDataSource: sl()));
+  sl.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(
+        localDataSource: sl(),
+        remoteDataSource: sl(),
+      ));
   sl.registerLazySingleton<OrderLocalDataSource>(() => OrderLocalDataSourceImpl(localStorage: sl()));
+  sl.registerLazySingleton<OrderRemoteDataSource>(() => OrderRemoteDataSourceImpl(dio: sl()));
 
   // External
   sl.registerLazySingleton(() => Dio());
