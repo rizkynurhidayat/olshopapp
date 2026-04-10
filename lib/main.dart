@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:olshopapp/injection_container.dart' as di;
 import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
@@ -14,6 +16,8 @@ import 'package:olshopapp/core/themes/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await GoogleSignIn.instance.initialize();
   await di.init();
   runApp(const MyApp());
 }
@@ -44,11 +48,12 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _getHome(AuthState state) {
-    if (state is AuthInitial || state is AuthLoading) {
+    if (state is AuthInitial || state is AuthChecking) {
       return const SplashPage();
     } else if (state is Authenticated) {
       return const MainPage();
     } else {
+      // This includes Unauthenticated, AuthLoading (during login), and AuthError
       return LoginPage();
     }
   }

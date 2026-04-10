@@ -50,3 +50,5 @@ GEMINI.md
 
 .gemini/
 gha-creds-*.json
+
+/android/app/google-services.json
