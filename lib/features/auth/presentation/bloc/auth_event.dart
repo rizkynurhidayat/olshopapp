@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:olshopapp/features/auth/domain/usecases/social_login.dart';
 
 abstract class AuthEvent extends Equatable {
   @override
@@ -22,6 +23,13 @@ class RegisterRequested extends AuthEvent {
   RegisterRequested(this.name, this.email, this.password);
   @override
   List<Object?> get props => [name, email, password];
+}
+
+class SocialLoginRequested extends AuthEvent {
+  final SocialProvider provider;
+  SocialLoginRequested(this.provider);
+  @override
+  List<Object?> get props => [provider];
 }
 
 class LogoutRequested extends AuthEvent {}

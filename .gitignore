@@ -45,8 +45,13 @@ app.*.map.json
 /android/app/release
 
 GEMINI.md
+AGENT.md
 
 .github/
 
 .gemini/
 gha-creds-*.json
+
+/android/app/google-services.json
+
+/lib/firebase_options.dart

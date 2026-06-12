@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
 import 'package:olshopapp/features/orders/presentation/widgets/order_item.dart';
 
@@ -15,7 +17,10 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   @override
   void initState() {
     super.initState();
-    context.read<OrderBloc>().add(FetchOrders());
+    final authState = context.read<AuthBloc>().state;
+    if (authState is Authenticated) {
+      context.read<OrderBloc>().add(FetchOrders(authState.user.id));
+    }
   }
 
   @override

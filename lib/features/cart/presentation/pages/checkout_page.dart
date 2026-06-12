@@ -6,6 +6,8 @@ import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -16,6 +18,15 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   String selectedPaymentMethod = 'Credit Card';
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,117 +36,131 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: const Text('Checkout', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Shipping Address Section
-                      _buildSectionTitle('Shipping Address'),
-                      const SizedBox(height: 12),
-                      _buildCard(
-                        child: Column(
-                          children: [
-                            TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Full Name',
-                                prefixIcon: const Icon(Icons.person_outline, color: AppColors.primaryPink),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
+      body: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state.status == CartStatus.success && state.items.isEmpty) {
+             _showSuccessDialog(context);
+          }
+          if (state.status == CartStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage ?? 'Submission failed')),
+            );
+          }
+        },
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, cartState) {
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Shipping Address Section
+                        _buildSectionTitle('Shipping Address'),
+                        const SizedBox(height: 12),
+                        _buildCard(
+                          child: Column(
+                            children: [
+                              TextField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  hintText: 'Full Name',
+                                  prefixIcon: const Icon(Icons.person_outline, color: AppColors.primaryPink),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: AppColors.background.withOpacity(0.5),
                                 ),
-                                filled: true,
-                                fillColor: AppColors.background.withOpacity(0.5),
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            TextField(
-                              maxLines: 3,
-                              decoration: InputDecoration(
-                                hintText: 'Complete Address',
-                                prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.primaryPink),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
+                              const SizedBox(height: 12),
+                              TextField(
+                                controller: addressController,
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  hintText: 'Complete Address',
+                                  prefixIcon: const Icon(Icons.location_on_outlined, color: AppColors.primaryPink),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  filled: true,
+                                  fillColor: AppColors.background.withOpacity(0.5),
                                 ),
-                                filled: true,
-                                fillColor: AppColors.background.withOpacity(0.5),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      
-                      const SizedBox(height: 24),
-                      
-                      // Payment Method Section
-                      _buildSectionTitle('Payment Method'),
-                      const SizedBox(height: 12),
-                      _buildCard(
-                        child: Column(
-                          children: [
-                            _buildPaymentOption(
-                              icon: Icons.credit_card,
-                              title: 'Credit Card',
-                              isSelected: selectedPaymentMethod == 'Credit Card',
-                              onTap: () => setState(() => selectedPaymentMethod = 'Credit Card'),
-                            ),
-                            const Divider(height: 24),
-                            _buildPaymentOption(
-                              icon: Icons.account_balance_wallet_outlined,
-                              title: 'Digital Wallet',
-                              isSelected: selectedPaymentMethod == 'Digital Wallet',
-                              onTap: () => setState(() => selectedPaymentMethod = 'Digital Wallet'),
-                            ),
-                            const Divider(height: 24),
-                            _buildPaymentOption(
-                              icon: Icons.payments_outlined,
-                              title: 'Cash on Delivery',
-                              isSelected: selectedPaymentMethod == 'Cash on Delivery',
-                              onTap: () => setState(() => selectedPaymentMethod = 'Cash on Delivery'),
-                            ),
-                          ],
+                        
+                        const SizedBox(height: 24),
+                        
+                        // Payment Method Section
+                        _buildSectionTitle('Payment Method'),
+                        const SizedBox(height: 12),
+                        _buildCard(
+                          child: Column(
+                            children: [
+                              _buildPaymentOption(
+                                icon: Icons.credit_card,
+                                title: 'Credit Card',
+                                isSelected: selectedPaymentMethod == 'Credit Card',
+                                onTap: () => setState(() => selectedPaymentMethod = 'Credit Card'),
+                              ),
+                              const Divider(height: 24),
+                              _buildPaymentOption(
+                                icon: Icons.account_balance_wallet_outlined,
+                                title: 'Digital Wallet',
+                                isSelected: selectedPaymentMethod == 'Digital Wallet',
+                                onTap: () => setState(() => selectedPaymentMethod = 'Digital Wallet'),
+                              ),
+                              const Divider(height: 24),
+                              _buildPaymentOption(
+                                icon: Icons.payments_outlined,
+                                title: 'Cash on Delivery',
+                                isSelected: selectedPaymentMethod == 'Cash on Delivery',
+                                onTap: () => setState(() => selectedPaymentMethod = 'Cash on Delivery'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
 
-                      const SizedBox(height: 24),
+                        const SizedBox(height: 24),
 
-                      // Order Summary Section
-                      _buildSectionTitle('Order Summary'),
-                      const SizedBox(height: 12),
-                      _buildCard(
-                        child: Column(
-                          children: [
-                            _buildSummaryRow('Subtotal', 'Rp. ${state.totalPrice.toStringAsFixed(3)}'),
-                            const SizedBox(height: 12),
-                            _buildSummaryRow('Shipping Fee', 'Rp. 15.000'),
-                            const SizedBox(height: 12),
-                            _buildSummaryRow('Discount', 'Rp. 0', isDiscount: true),
-                            const Divider(height: 24),
-                            _buildSummaryRow(
-                              'Total Payment', 
-                              'Rp. ${(state.totalPrice + 15.000).toStringAsFixed(3)}',
-                              isTotal: true,
-                            ),
-                          ],
+                        // Order Summary Section
+                        _buildSectionTitle('Order Summary'),
+                        const SizedBox(height: 12),
+                        _buildCard(
+                          child: Column(
+                            children: [
+                              _buildSummaryRow('Subtotal', 'Rp. ${cartState.totalPrice.toStringAsFixed(3)}'),
+                              const SizedBox(height: 12),
+                              _buildSummaryRow('Shipping Fee', 'Rp. 15.000'),
+                              const SizedBox(height: 12),
+                              _buildSummaryRow('Discount', 'Rp. 0', isDiscount: true),
+                              const Divider(height: 24),
+                              _buildSummaryRow(
+                                'Total Payment', 
+                                'Rp. ${(cartState.totalPrice + 15.000).toStringAsFixed(3)}',
+                                isTotal: true,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 40),
-                    ],
+                        const SizedBox(height: 40),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              
-              // Bottom Action
-              _buildBottomAction(context),
-            ],
-          );
-        },
+                
+                // Bottom Action
+                _buildBottomAction(context),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -252,52 +277,82 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget _buildBottomAction(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      builder: (context, state) {
-        return Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceWhite,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 20,
-                offset: const Offset(0, -5),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) {
+        return BlocBuilder<CartBloc, CartState>(
+          builder: (context, cartState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceWhite,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 20,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: SafeArea(
-            child: SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryPink,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 0,
-                ),
-                onPressed: () {
-                  final order = OrderEntity(
-                    id: DateTime.now().millisecondsSinceEpoch.toString(),
-                    items: state.items.map((item) => OrderItemEntity(
-                      product: item.product,
-                      quantity: item.quantity,
-                    )).toList(),
-                    totalPrice: state.totalPrice + 15.000,
-                    date: DateTime.now(),
-                    status: 'Processing',
-                  );
-                  context.read<OrderBloc>().add(AddOrder(order));
-                  _showSuccessDialog(context);
-                },
-                child: const Text(
-                  'Confirm Order',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              child: SafeArea(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryPink,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      elevation: 0,
+                    ),
+                    onPressed: cartState.status == CartStatus.loading ? null : () {
+                      final name = nameController.text.trim();
+                      final address = addressController.text.trim();
+
+                      if (name.isEmpty || address.isEmpty || selectedPaymentMethod.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please fill all fields')),
+                        );
+                        return;
+                      }
+
+                      String uid = '';
+                      if (authState is Authenticated) {
+                        uid = authState.user.id;
+                      }
+
+                      final order = OrderEntity(
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
+                        items: cartState.items.map((item) => OrderItemEntity(
+                          product: item.product,
+                          quantity: item.quantity,
+                        )).toList(),
+                        totalPrice: cartState.totalPrice + 15.000,
+                        date: DateTime.now(),
+                        status: 'Processing',
+                      );
+                      context.read<OrderBloc>().add(AddOrder(order));
+                      context.read<CartBloc>().add(SubmitCart(
+                        uid: uid,
+                        recipientName: name,
+                        address: address,
+                        paymentMethod: selectedPaymentMethod,
+                        subtotal: cartState.totalPrice,
+                        shippingFee: 15.000,
+                        discount: 0,
+                        totalPayment: cartState.totalPrice + 15.000,
+                      ));
+                    },
+                    child: cartState.status == CartStatus.loading 
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          'Confirm Order',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -343,7 +398,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   elevation: 0,
                 ),
                 onPressed: () {
-                  context.read<CartBloc>().add(ClearCart());
                   Navigator.pop(context); // Close dialog
                   Navigator.popUntil(context, (route) => route.isFirst);
                 },

@@ -9,7 +9,6 @@ import 'package:olshopapp/features/cart/presentation/pages/cart_page.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_event.dart';
 import 'package:olshopapp/features/cart/presentation/bloc/cart_state.dart';
-import 'package:olshopapp/features/orders/presentation/bloc/order_bloc.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
 
@@ -27,7 +26,6 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     context.read<CartBloc>().add(LoadCart());
-    context.read<OrderBloc>().add(FetchOrders());
   }
 
   final List<Widget> _pages = [

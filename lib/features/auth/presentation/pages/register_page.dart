@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:olshopapp/core/themes/theme.dart';
+import 'package:olshopapp/features/auth/domain/usecases/social_login.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_event.dart';
 import 'package:olshopapp/features/auth/presentation/bloc/auth_state.dart';
@@ -15,18 +16,20 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildSocialButton(IconData icon, Color color) {
+    final width = MediaQuery.of(context).size.width;
+    Widget _buildSocialButton(IconData icon, Color color, SocialProvider provider) {
       return Container(
-        width: 80,
+        width: width-60,
         height: 50,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(12),
         ),
         child: IconButton(
-          icon: Icon(icon, color: color, size: 28),
+          // icon: Icon(icon, color: color, size: 28),
+          icon: Image.network("https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw",),
           onPressed: () {
-            // TODO: Implementasi logika Social Login
+            context.read<AuthBloc>().add(SocialLoginRequested(provider));
           },
         ),
       );
@@ -47,7 +50,6 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Placeholder untuk Ilustrasi
                 Center(
                   child: Container(
                     height: 200,
@@ -64,8 +66,6 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                // 2. Judul Register
                 const Text(
                   'Register',
                   style: TextStyle(
@@ -75,8 +75,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-
-                // 3. Input Name
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
@@ -92,8 +90,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // 4. Input Email
                 TextField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -110,8 +106,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // 5. Input Password
                 TextField(
                   controller: passwordController,
                   obscureText: true,
@@ -128,8 +122,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-
-                // 6. Tombol Register
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -141,10 +133,10 @@ class RegisterPage extends StatelessWidget {
                       return ElevatedButton(
                         onPressed: () {
                           context.read<AuthBloc>().add(RegisterRequested(
-                            nameController.text,
-                            emailController.text,
-                            passwordController.text,
-                          ));
+                                nameController.text.trim(),
+                                emailController.text.trim(),
+                                passwordController.text,
+                              ));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryPink,
@@ -162,8 +154,6 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-
-                // 7. Separator
                 Row(
                   children: [
                     Expanded(child: Divider(color: Colors.grey.shade300)),
@@ -178,19 +168,13 @@ class RegisterPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-
-                // 8. Social Register Buttons
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildSocialButton(Icons.g_mobiledata, Colors.red),
-                    _buildSocialButton(Icons.facebook, Colors.blue),
-                    _buildSocialButton(Icons.apple, Colors.black),
+                    _buildSocialButton(Icons.g_mobiledata, Colors.red, SocialProvider.google),
                   ],
                 ),
                 const SizedBox(height: 48),
-
-                // 9. Teks Login
                 Center(
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
